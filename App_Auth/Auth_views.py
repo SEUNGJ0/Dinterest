@@ -74,8 +74,12 @@ class JWTSignupView(APIView):
                     'refresh_token':refresh_token 
                 },
             }
-
-            return Response(attrs, status=status.HTTP_201_CREATED)
+            # 응답 생성 
+            response = Response(attrs, status=status.HTTP_200_OK)
+            # 토큰을 쿠키로 저장
+            response.set_cookie("access_token", access_token, httponly=True)
+            response.set_cookie("refresh_token", refresh_token, httponly=True)
+            return response
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -105,7 +109,7 @@ class JWTLoginView(APIView):
                     }
                 
                 # 응답 생성 
-                response = Response(attrs, status=status.HTTP_200_OK)\
+                response = Response(attrs, status=status.HTTP_200_OK)
                 # 토큰을 쿠키로 저장
                 response.set_cookie("access_token", access_token, httponly=True)
                 response.set_cookie("refresh_token", refresh_token, httponly=True)
