@@ -5,19 +5,14 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 class UserManager(BaseUserManager):    
     use_in_migrations = True    
     # 파라미터를 받아서 새로운 사용자를 생성하고 저장
-    def create_user(self, email, password, birth=None, gender=None, country='KR', language='KR'):        
+    def create_user(self, email, password, **extra_fields):        
         if not email:            
             raise ValueError('이메일은 필수입니다.')
         if not password:            
             raise ValueError('비밀번호는 필수입니다.')
  
-        user = self.model(            
-            email=self.normalize_email(email),
-            birth = birth,       
-            gender = gender,
-            country = country,
-            language = language
-        )        
+        email=self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
         user.set_password(password)        
         user.save(using=self._db)        
         return user

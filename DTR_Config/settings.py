@@ -1,6 +1,7 @@
 import os
 from .get_secret import get_secret
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,26 +28,51 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Apps
+    'App_Auth',
     'App_Boards',
     'App_Images',
     'App_Pins',
     'App_Profiles',
-    'App_Auth',
+    # Installed Library
     'rest_framework',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+    'rest_framework_simplejwt', # JWT
+    'rest_framework_simplejwt.token_blacklist',
+
+    'allauth', # django-allauth - 거의 대부분의 소셜 로그인을 지원하고 회원가입 기능을 제공.
+    'allauth.account',
+    'allauth.socialaccount'
 ]
+
+#django-allauth
+SITE_ID = 1                               # 해당 도메인의 id
+ACCOUNT_UNIQUE_EMAIL = True               # User email unique 사용 여부
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None  # User username type
+ACCOUNT_USERNAME_REQUIRED = False         # User username 필수 여부
+ACCOUNT_EMAIL_REQUIRED = True             # User email 필수 여부
+ACCOUNT_AUTHENTICATION_METHOD = 'email'   # 로그인 인증 수단
+ACCOUNT_EMAIL_VERIFICATION = 'none'       # Email 인증 필수 여부
+
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.authentication.BasicAuthentication',
     ),
     # Pagination 클래스와 페이지 크기를 정의
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination', 
     'PAGE_SIZE': 10
+}
+REST_USE_JWT = True # JWT 사용 여부
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=2), # Access Token의 유효기간 설정
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7), # Refresh Token의 유효기간 설정
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'TOKEN_USER_CLASS': 'App_Auth.User', 
 }
 
 MIDDLEWARE = [
@@ -57,6 +83,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware', # allauth 미들웨어
 ]
 
 ROOT_URLCONF = 'DTR_Config.urls'
