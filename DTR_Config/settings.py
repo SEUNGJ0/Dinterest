@@ -29,11 +29,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Apps
-    'App_Auth',
-    'App_Boards',
-    'App_Images',
-    'App_Pins',
-    'App_Profiles',
+    'App_Auth', # 계정 관리
+    'App_Boards', # 저장된 핀들을 보관하는 카테고리
+    'App_Pins', # 유저들이 업로드하는 이미지들
+    'App_Profiles', # 사용자 프로필 정보 관리
     # Installed Library
     'rest_framework',
     'rest_framework.authtoken',
@@ -68,7 +67,7 @@ REST_FRAMEWORK = {
 REST_USE_JWT = True # JWT 사용 여부
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=2), # Access Token의 유효기간 설정
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=12), # Access Token의 유효기간 설정
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7), # Refresh Token의 유효기간 설정
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
