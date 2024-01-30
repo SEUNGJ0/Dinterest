@@ -13,5 +13,5 @@ class CommentAdmin(admin.ModelAdmin):
 
 @admin.register(Like)
 class LikeAdmin(admin.ModelAdmin):
-    list_display = ('user', 'pin', 'created_date')
+    list_display = ('user', 'pin')
     search_fields = ['user__email']
