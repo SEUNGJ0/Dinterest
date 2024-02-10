@@ -25,3 +25,4 @@ class Like(models.Model):
     # 좋아요 중복 방지
     class Meta:
         unique_together = ['user', 'pin']
+
